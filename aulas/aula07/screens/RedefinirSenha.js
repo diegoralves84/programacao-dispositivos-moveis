@@ -2,48 +2,57 @@ import { useState } from "react";
 import { View } from "react-native";
 import { TextInput, Button, HelperText } from "react-native-paper";
 
-
 function RedefinirSenha() {
-    const [email, setEmail] = useState("");
-    const [erro, setErro] = useState("");
+  const [email, setEmail] = useState("");
+  const [erro, setErro] = useState("");
 
-    const trataEnviar = () => {
-        if (!email) {
-            setErro("E-mail obrigatório, mané!");
-            return;
-        }
+  const validaEmail = () => {
+    if (!email) {
+      setErro("E-mail é obrigatorio");
+      return false;
+    }
 
-        if (!email.includes("@")) {
-            setErro("E-mail inválido, pangaré!")
-            return;
-        }
+    if (!email.includes("@")) {
+      setErro("E-mail inválido");
+      return false;
+    }
 
-        setEmail("");
-        setErro("");
-        alert("Ufa! E-mail enviado!");
+    return true;
+  };
 
-    };
+  const trataTexto = (texto) => {
+    setEmail(texto);
+    validaEmail();
+  }
 
-    return (
-    <View style={{flex:1, padding: 16}}>
-        <TextInput 
+  const trataEnviar = () => {
+    if (!validaEmail()) {
+      return;
+    }
+    setEmail("");
+    setErro("");
+    alert("E-mail enviado!");
+  };
+
+  return (
+    <View style={{ flex: 1, padding: 16 }}>
+      <TextInput
         autoCapitalize="none"
         keyboardType="email-address"
-        label={"Email"} 
+        label="Email"
         value={email}
-        onChangeText={setEmail}
+        onChangeText={trataTexto}
         mode="outlined"
-        style={{marginBottom: 16}}
-    />
-    <HelperText type="error" visible={erro}>
+        error={erro != ""}
+      />
+      <HelperText type="error" visible={erro != ""}>
         {erro}
-    </HelperText>
-    
-    <Button mode="contained" ondPress={trataEnviar}>
+      </HelperText>
+      <Button mode="contained" onPress={trataEnviar}>
         Enviar
-    </Button>
-   </View>
-);
+      </Button>
+    </View>
+  );
 }
 
 export default RedefinirSenha;
